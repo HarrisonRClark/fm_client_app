@@ -10,7 +10,18 @@ function readFile(file) {
 async function processFile(file) {
     try {
         const content = await readFile(file);
-        validateHtmlContent(content);
+        const table = validateHtmlContent(content);
+
+        if (table) {
+            const tableData = convertTableToObject(table);
+            const scores = calculateScores(tableData, loadLocalData());
+            if (scores) {
+                const formattedNumber = scores.playerScores.length.toLocaleString();
+                showToast(`Calculated ${formattedNumber} roles in ${scores.timeTaken} ms`, 'Calculation Complete', 'success');
+            }
+            console.log(scores);
+        } 
+        
     } catch (error) {
         showToast(error.message, 'File Read Error');
     }
@@ -25,7 +36,10 @@ function validateHtmlContent(html) {
     if (!table) return;
     if (!hasValidRowCount(table)) return;
 
-    showToast("This is valid, good to proceed with calculations!", "Success", "success");
+
+    // showToast("This is valid, good to proceed with calculations!", "Success", "success");
+
+    return table;
 }
 
 function hasValidTable(doc) {
@@ -39,9 +53,34 @@ function hasValidTable(doc) {
 
 function hasValidRowCount(table) {
     const rows = table.querySelectorAll('tr');
-    if (rows.length > 2000) {
-        showToast('The table has more than 2000 rows.', 'Validation Error');
+    if (rows.length > 20000) {
+        showToast('The table has more than 20,000 rows.', 'Validation Error');
         return false;
     }
     return true;
+}
+
+
+function convertTableToObject(table) {
+    let result = [];
+    let headers = [];
+
+    const headerCells = table.querySelectorAll('th');
+    headerCells.forEach(header => {
+        headers.push(header.textContent.trim());
+    });
+
+    const rows = table.querySelectorAll('tr');
+    rows.forEach((row, rowIndex) => {
+        if (rowIndex === 0) return;
+        let rowData = {};
+        const cells = row.querySelectorAll('td');
+        cells.forEach((cell, cellIndex) => {
+            let header = headers[cellIndex];
+            rowData[header] = cell.textContent.trim();
+        });
+        result.push(rowData);
+    });
+
+    return result;
 }
