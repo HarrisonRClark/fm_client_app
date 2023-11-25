@@ -23,20 +23,19 @@ async function loadSeedData() {
         showToast('There has been an error downloading the attribute weightings. Please try again.', "Error!" , 'error');
     }
 }
-
 function calculateScores(tableData, seedData) {
-    const playerScores = [];
     const startTime = Date.now();
+    const playerScores = tableData.map(player => {
+        const scoresByRole = {};
 
-    tableData.forEach(player => {
         seedData.forEach(role => {
             try {
                 let totalScore = 0;
                 let totalWeight = 0;
 
                 for (const [attribute, weight] of Object.entries(role)) {
-                    if (attribute == 'Role' || attribute == 'RoleCode') {
-                        continue; 
+                    if (attribute === 'Role' || attribute === 'RoleCode') {
+                        continue;
                     }
 
                     if (!player.hasOwnProperty(attribute)) {
@@ -50,29 +49,46 @@ function calculateScores(tableData, seedData) {
 
                 if (totalWeight > 0) {
                     const score = totalScore / totalWeight;
-                    playerScores.push({
-                        playerName: player.Name,
-                        roleCode: role.RoleCode,
-                        roleName: role.Role,
-                        score: score
-                    });
+                    scoresByRole[role.RoleCode] = score;
                 }
-
-                
-
             } catch (error) {
                 console.error(`Error calculating score for ${player.Name}: ${error.message}`);
+                scoresByRole[role.RoleCode] = 'Error'; // Indicate error for this role
             }
         });
+
+        return { ...player, ...scoresByRole };
     });
 
     const endTime = Date.now();
     const timeTaken = endTime - startTime;
 
-    return { playerScores, timeTaken };;
+    return { playerScores, timeTaken };
 }
 
 
+function findHighestScoringRoles(playerScores, seedData) {
+    return playerScores.map(player => {
+        let highestScore = -Infinity;
+        let highestScoringRole = '';
+
+        seedData.forEach(role => {
+            const roleCode = role.RoleCode;
+            if (player[roleCode] && player[roleCode] > highestScore) {
+                highestScore = player[roleCode];
+                highestScoringRole = role.Role;
+                highestScoringRoleCode = role.RoleCode;
+            }
+        });
+
+        return {
+            ...player,
+            HighestScoringRole: highestScoringRole,
+            HighestScoringRoleCode: highestScoringRoleCode,
+            HighestScore: highestScore
+        };
+    });
+}
 
 
 

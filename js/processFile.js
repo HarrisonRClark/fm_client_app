@@ -16,12 +16,22 @@ async function processFile(file) {
             const tableData = convertTableToObject(table);
             const scores = calculateScores(tableData, loadLocalData());
             if (scores) {
-                const formattedNumber = scores.playerScores.length.toLocaleString();
-                showToast(`Calculated ${formattedNumber} roles in ${scores.timeTaken} ms`, 'Calculation Complete', 'success');
+                const numberOfPlayers = scores.playerScores.length;
+                const formattedNumberOfPlayers = numberOfPlayers.toLocaleString();
+                const timeTakenMs = scores.timeTaken;
+
+                showToast(`Calculated all scores for ${formattedNumberOfPlayers} players in ${timeTakenMs} ms`, 'Calculation Complete', 'success');
+
+                const playersWithHighestRoles = findHighestScoringRoles(scores.playerScores, loadLocalData());
+
+                
+                showToast("Determined best scores", "Success!", "success"); 
+
+                console.log(playersWithHighestRoles);
             }
-            console.log(scores);
-        } 
-        
+            
+        }
+
     } catch (error) {
         showToast(error.message, 'File Read Error');
     }
