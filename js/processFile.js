@@ -20,13 +20,10 @@ async function processFile(file) {
                 const formattedNumberOfPlayers = numberOfPlayers.toLocaleString();
                 const timeTakenMs = scores.timeTaken;
 
-                showToast(`Calculated all scores for ${formattedNumberOfPlayers} players in ${timeTakenMs} ms`, 'Calculation Complete', 'success');
-
-                const playersWithHighestRoles = findHighestScoringRoles(scores.playerScores, loadLocalData());
-
                 
-                showToast("Determined best scores", "Success!", "success"); 
-
+                const playersWithHighestRoles = findHighestScoringRoles(scores.playerScores, loadLocalData());
+                showToast(`Calculated all scores for ${formattedNumberOfPlayers} players in ${timeTakenMs} ms`, 'Calculation Complete', 'success');
+                
                 console.log(playersWithHighestRoles);
             }
             

@@ -1,11 +1,19 @@
 const seedDataKey = 'seedData';
 
+
+function dispatchSeedDataLoadedEvent(seedData) {
+    const event = new CustomEvent('SeedDataLoaded', { detail: seedData });
+    document.dispatchEvent(event);
+}
+
+
 async function loadSeedData() {
 
     try {
 
         let seedData = localStorage.getItem(seedDataKey);
         if (seedData) {
+            dispatchSeedDataLoadedEvent(seedData);
             return JSON.parse(seedData);
         }
 
@@ -15,14 +23,17 @@ async function loadSeedData() {
         }
         const data = await response.json();
 
-        localStorage.setItem(seedDataKey, JSON.stringify(data));
+        seedData = localStorage.setItem(seedDataKey, JSON.stringify(data));
         showToast("Base attribute weightings have been imported and saved.", 'Seed Data Success', 'success');
-
+        dispatchSeedDataLoadedEvent(seedData);
         return data;
+
     } catch (error) {
         showToast('There has been an error downloading the attribute weightings. Please try again.', "Error!", 'error');
+        console.log(error);
     }
 }
+
 function calculateScores(tableData, seedData) {
     const startTime = Date.now();
     const playerScores = tableData.map(player => {
@@ -106,6 +117,5 @@ function loadLocalData() {
 }
 
 
+
 loadSeedData();
-
-
