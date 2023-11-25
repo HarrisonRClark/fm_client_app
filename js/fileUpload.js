@@ -2,12 +2,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var fileInput = document.getElementById('file-input');
 
     fileInput.addEventListener('change', function (event) {
+        showSpinner();
         var file = event.target.files[0];
 
         if (isValidFile(file)) {
             processFile(file);
         } else {
             resetFileInput(fileInput);
+            hideSpinner();
         }
     });
 });
@@ -44,4 +46,16 @@ function isHtmlFileType({ type, name }) {
 
 function resetFileInput(fileInput) {
     fileInput.value = '';
+}
+
+
+
+// UI
+
+function showSpinner() {
+    document.getElementById('loadingSpinner').style.display = 'block';
+}
+
+function hideSpinner() {
+    document.getElementById('loadingSpinner').style.display = 'none';
 }

@@ -1,7 +1,7 @@
 const seedDataKey = 'seedData';
 
 async function loadSeedData() {
-    
+
     try {
 
         let seedData = localStorage.getItem(seedDataKey);
@@ -14,18 +14,19 @@ async function loadSeedData() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        
+
         localStorage.setItem(seedDataKey, JSON.stringify(data));
         showToast("Base attribute weightings have been imported and saved.", 'Seed Data Success', 'success');
 
         return data;
     } catch (error) {
-        showToast('There has been an error downloading the attribute weightings. Please try again.', "Error!" , 'error');
+        showToast('There has been an error downloading the attribute weightings. Please try again.', "Error!", 'error');
     }
 }
 function calculateScores(tableData, seedData) {
     const startTime = Date.now();
     const playerScores = tableData.map(player => {
+
         const scoresByRole = {};
 
         seedData.forEach(role => {
@@ -52,14 +53,18 @@ function calculateScores(tableData, seedData) {
                     scoresByRole[role.RoleCode] = score;
                 }
             } catch (error) {
+                hideSpinner();
+                showToast(`Error calculating score for ${player.Name}: ${error.message}`, "Error!");
                 console.error(`Error calculating score for ${player.Name}: ${error.message}`);
                 scoresByRole[role.RoleCode] = 'Error'; // Indicate error for this role
+                
             }
         });
 
         return { ...player, ...scoresByRole };
     });
 
+    hideSpinner();
     const endTime = Date.now();
     const timeTaken = endTime - startTime;
 
@@ -102,3 +107,5 @@ function loadLocalData() {
 
 
 loadSeedData();
+
+
