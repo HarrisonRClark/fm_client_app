@@ -10,11 +10,11 @@ function readFile(file) {
 async function processFile(file) {
     try {
         const content = await readFile(file);
-        const table = validateHtmlContent(content);
+        const table = await validateHtmlContent(content);
 
         if (table) {
-            const tableData = convertTableToObject(table);
-            const scores = calculateScores(tableData, loadLocalData());
+            const tableData =  convertTableToObject(table);
+            const scores =  calculateScores(tableData, loadLocalData());
             if (scores) {
                 const numberOfPlayers = scores.playerScores.length;
                 const formattedNumberOfPlayers = numberOfPlayers.toLocaleString();
@@ -31,6 +31,7 @@ async function processFile(file) {
 
     } catch (error) {
         showToast(error.message, 'File Read Error');
+        hideSpinner();
     }
 }
 

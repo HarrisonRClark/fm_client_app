@@ -2,15 +2,16 @@ document.addEventListener('DOMContentLoaded', function () {
     var fileInput = document.getElementById('file-input');
 
     fileInput.addEventListener('change', function (event) {
-        showSpinner();
         var file = event.target.files[0];
-
-        if (isValidFile(file)) {
-            processFile(file);
-        } else {
-            resetFileInput(fileInput);
-            hideSpinner();
-        }
+        showSpinner();
+        setTimeout(() => {
+            if (isValidFile(file)) {
+                processFile(file).then(hideSpinner);
+            } else {
+                resetFileInput(fileInput);
+                hideSpinner();
+            }
+        }, 0);
     });
 });
 
