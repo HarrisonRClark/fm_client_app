@@ -10,41 +10,98 @@
     integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
+
   <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
 
-
+  <nav class="navbar container mb-5">
+    <div class="container-fluid d-flex justify-content-between">
+      <!-- Logo -->
+      <a class="navbar-brand" href="https://www.youtube.com/@squirrel_plays_fof4318">
+        <img src="assets/img/squirrel.png" alt="squirrel_plays logo" style="height: 64px; width: auto;">
+      </a>
+  
+      <!-- Suggestions Link (Centered) -->
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/playingsquirrel">
+            <small>Suggestions? Get in touch on </small>
+            <i class="bi bi-twitter"></i>
+          </a>
+        </li>
+      </ul>
+  
+      <!-- Dark/Light Mode Toggle -->
+      <form class="d-flex">
+        <button class="btn" id="modeToggle" type="button">
+          <i class="bi bi-brightness-high-fill"></i>
+        </button>
+      </form>
+    </div>
+  </nav>    
 
 
   <div class="container mt-3">
-    <h3>Selected Roles</h3>
+    <div class="display-6 pb-5">Football Manager Player Scoring System</div>
+    <p>
+      How to Use: See <a href="https://www.youtube.com/watch?v=DvV9Aigngi8" target="_blank">this video</a> by <a href="https://www.youtube.com/@squirrel_plays_fof4318">squirrel_plays</a>. <a href="https://www.mediafire.com/file/ymf6xhw0bk4enjj/FM24_files.zip/file" target="_blank">Click here to download</a> the views needed to export data from FM.
+      
+    </p>
+    <p>
+      Values in brackets <code>(afa)</code> are what will be shown in the returned table.
+    </p>
+    <hr>
     <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between">
+          <div class="lead ">Select roles</div>
+          <div>
+            <button type="button" class="btn btn-danger" id="clear-selected-roles">
+              <i class="bi bi-trash3"></i>
+            </button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#roleListModal">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
       <div class="card-body" style="max-height: 25vh; overflow-y: auto;">
         <div class="selected-roles d-flex flex-wrap">
           <!-- Dynamically generated role pills will go here -->
         </div>
       </div>
-      <div class="card-footer text-end">
-        <button type="button" class="btn btn-danger" id="clear-selected-roles">
-          <i class="bi bi-trash3" ></i>
-        </button>
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#roleListModal">
-          <i class="bi bi-plus-lg"></i>
-        </button>
-      </div>
     </div>
     <hr>
-    <div class="col-5">
-      <input type="file" id="file-input" class="form-control">
-    </div>
-    <div id="loadingSpinner" class="spinner-border" role="status" style="display: none;">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    
-  </div>
+    <div class="d-flex justify-content-between">
+      <div class="div">
+        <input type="file" id="file-input" class="form-control">
+      </div>
 
+        <div id="loadingSpinner" class="spinner-border" role="status" style="display: none;">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+
+      <button id="calculateScoresButton" class="btn btn-primary">
+        Upload
+      </button>
+    </div>
+    <hr>
+  </div>
+  <div class="p-2">
+    <table id="playersTable" 
+    data-show-export="true"
+    data-pagination="true"
+    
+  data-page-size="25"
+    data-click-to-select="true"
+    data-toolbar="#toolbar"
+    data-show-columns="true"
+    ></table>
+  </div>
 
 
 
@@ -74,47 +131,69 @@
   </div>
 
 
-<!-- Edit Role Modal -->
-<div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+  <!-- Edit Role Modal -->
+  <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
-              <!-- Dynamic form will be injected here -->
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="saveRoleChanges">Save Changes</button>
-          </div>
+        <div class="modal-header">
+          <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+          <!-- Dynamic form will be injected here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveRoleChanges">Save Changes</button>
+        </div>
       </div>
+    </div>
   </div>
-</div>
 
 
 
 
 
-  
 
 
-  <div class="toast-container position-fixed bottom-0 end-0 p-2" id="toast-container" aria-live="polite"
+
+  <div class="toast-container position-fixed top-0 end-0 p-2" id="toast-container" aria-live="polite"
     aria-atomic="true">
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <footer class="container" style="text-align: center;">
+    <a href="https://github.com/Fatheed7/FM" class="contrast" aria-label="Pico GitHub repository"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" height="24px"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg></a>
+    <small class="contrast">
+      Thanks to <a href="https://github.com/Fatheed7">Fatheed7</a> & <a href="https://github.com/HarrisonRClark">HarrisonRClark</a>
+    </small>
+</footer>
+  
+
+  <!-- Boostrap -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <!-- Bootstrap Table -->
+  <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+
+  <!-- TableExport plugin and its dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/tableExport.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF/jspdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
+
+  <!-- Bootstrap Table Export extension -->
+  <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
   <script src="js/toastNotifications.js"></script>
   <script src="js/fileUpload.js"></script>
+  <script src="js/tableGeneration.js"></script>
   <script src="js/processFile.js"></script>
   <script src="js/dataProcessing.js"></script>
-  <script src="js/tableGeneration.js"></script>
   <script src="js/listFilter.js"></script>
   <script src="js/editWeighting.js"></script>
   <script src="js/themeToggle.js"></script>

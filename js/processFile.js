@@ -9,31 +9,36 @@ function readFile(file) {
 
 async function processFile(file) {
     try {
+        showSpinner(); // Show spinner at the start
+
         const content = await readFile(file);
         const table = await validateHtmlContent(content);
 
         if (table) {
-            const tableData =  convertTableToObject(table);
-            const scores =  calculateScores(tableData, loadLocalData());
-            if (scores) {
+            const tableData = convertTableToObject(table);
+            const scores = calculateScores(tableData, loadLocalData());
+
+            if (scores && !scores.errorOccurred) {
                 const numberOfPlayers = scores.playerScores.length;
                 const formattedNumberOfPlayers = numberOfPlayers.toLocaleString();
                 const timeTakenMs = scores.timeTaken;
 
-                
                 const playersWithHighestRoles = findHighestScoringRoles(scores.playerScores, loadLocalData());
                 showToast(`Calculated all scores for ${formattedNumberOfPlayers} players in ${timeTakenMs} ms`, 'Calculation Complete', 'success');
-                
-                console.log(playersWithHighestRoles);
-            }
-            
-        }
 
+                initializeBootstrapTable(playersWithHighestRoles);
+            } else if (scores.errorOccurred) {
+                showToast(scores.errorMessage, 'Calculation Error', 'error');
+            }
+        }
     } catch (error) {
         showToast(error.message, 'File Read Error');
+    } finally {
         hideSpinner();
     }
 }
+
+
 
 function validateHtmlContent(html) {
     const parser = new DOMParser();

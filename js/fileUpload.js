@@ -1,12 +1,42 @@
-function fileChangeListener(){
+function setupFileChangeListener(){
     var fileInput = document.getElementById('file-input');
 
-    fileInput.addEventListener('change', function (event) {
-        var file = event.target.files[0];
+    fileInput.addEventListener('change', function () {
+        var file = fileInput.files[0];
+        if (!file) {
+            showToast("No file selected!", "Error", "error");
+            return;
+        }
+
         showSpinner();
         setTimeout(() => {
             if (isValidFile(file)) {
-                processFile(file).then(hideSpinner);
+                hideSpinner();
+                showToast("Valid file!", "Success", "success");
+            } else {
+                resetFileInput(fileInput);
+                hideSpinner();
+            }
+        }, 0);
+    });
+}
+
+
+function setupCalculateButtonListener(){
+    var fileInput = document.getElementById('file-input');
+    var calculateButton = document.getElementById('calculateScoresButton');
+
+    calculateButton.addEventListener('click', function () {
+        var file = fileInput.files[0];
+        if (!file) {
+            showToast("No file selected!", "Error", "error");
+            return;
+        }
+
+        showSpinner();
+        setTimeout(() => {
+            if (isValidFile(file)) {
+                processFile(file);
             } else {
                 resetFileInput(fileInput);
                 hideSpinner();
@@ -52,11 +82,10 @@ function resetFileInput(fileInput) {
 
 
 // UI
-
 function showSpinner() {
-    document.getElementById('loadingSpinner').style.display = 'block';
+    $('#loadingSpinner').show();
 }
 
 function hideSpinner() {
-    document.getElementById('loadingSpinner').style.display = 'none';
+    $('#loadingSpinner').hide();
 }

@@ -39,11 +39,13 @@ async function loadSeedData() {
 
 function calculateScores(tableData, seedData) {
     const startTime = Date.now();
-    const playerScores = tableData.map(player => {
+    let errorOccurred = false;
+    let errorMessage = '';
 
+    const playerScores = tableData.map(player => {
         const scoresByRole = {};
 
-        seedData.forEach(role => {
+        for (const role of seedData) {
             try {
                 let totalScore = 0;
                 let totalWeight = 0;
@@ -64,39 +66,39 @@ function calculateScores(tableData, seedData) {
 
                 if (totalWeight > 0) {
                     const score = totalScore / totalWeight;
-                    scoresByRole[role.RoleCode] = score;
+                    scoresByRole[role.RoleCode] = score.toFixed(1);
                 }
             } catch (error) {
-                hideSpinner();
-                showToast(`Error calculating score for ${player.Name}: ${error.message}`, "Error!");
-                console.error(`Error calculating score for ${player.Name}: ${error.message}`);
-                scoresByRole[role.RoleCode] = 'Error'; // Indicate error for this role
-                
+                errorOccurred = true;
+                errorMessage = `Error calculating score for ${player.Name}: ${error.message}`;
+                break;
             }
-        });
+        }
 
         return { ...player, ...scoresByRole };
     });
 
-    hideSpinner();
     const endTime = Date.now();
     const timeTaken = endTime - startTime;
 
-    return { playerScores, timeTaken };
+    return { playerScores, timeTaken, errorOccurred, errorMessage };
 }
+
 
 
 function findHighestScoringRoles(playerScores, seedData) {
     return playerScores.map(player => {
         let highestScore = -Infinity;
         let highestScoringRole = '';
+        let highestScoringRoleCode = ''; // Declare this variable inside the map function
 
         seedData.forEach(role => {
             const roleCode = role.RoleCode;
-            if (player[roleCode] && player[roleCode] > highestScore) {
-                highestScore = player[roleCode];
+            const roleScore = parseFloat(player[roleCode]);
+            if (!isNaN(roleScore) && roleScore > highestScore) {
+                highestScore = roleScore;
                 highestScoringRole = role.Role;
-                highestScoringRoleCode = role.RoleCode;
+                highestScoringRoleCode = roleCode; // Correctly assign the roleCode
             }
         });
 
@@ -108,6 +110,7 @@ function findHighestScoringRoles(playerScores, seedData) {
         };
     });
 }
+
 
 
 
