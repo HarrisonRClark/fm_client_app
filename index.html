@@ -10,49 +10,76 @@
     integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 d-flex align-items-center gap-3 py-4">
 
-        <div class="col-5">
-          <input type="file" id="file-input" class="form-control">
-        </div>
-        <div id="loadingSpinner" class="spinner-border" role="status" style="display: none;">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    </div>
 
-    <div class="dropdown custom-dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        Select Role
-      </button>
-      <ul id="roleList" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <!-- JavaScript will populate list items here -->
-      </ul>
-    </div>
 
-    <!-- Modal Placeholder (if needed for editing roles) -->
-    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- Modal content goes here -->
+
+  <div class="container mt-3">
+    <h3>Selected Roles</h3>
+    <div class="card">
+      <div class="card-body" style="max-height: 25vh; overflow-y: auto;">
+        <div class="selected-roles d-flex flex-wrap">
+          <!-- Dynamically generated role pills will go here -->
         </div>
       </div>
+      <div class="card-footer text-end">
+        <button type="button" class="btn btn-danger" id="clear-selected-roles">
+          <i class="bi bi-trash3" ></i>
+        </button>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#roleListModal">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </div>
     </div>
-
-
-
+    <hr>
+    <div class="col-5">
+      <input type="file" id="file-input" class="form-control">
+    </div>
+    <div id="loadingSpinner" class="spinner-border" role="status" style="display: none;">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    
   </div>
 
 
 
-  <div class="toast-container position-fixed top-0 end-0 p-2" id="toast-container" aria-live="polite"
+
+  <!-- Fullscreen Modal -->
+  <div class="modal fade" id="roleListModal" tabindex="-1" aria-labelledby="roleListModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <input type="text" class="form-control" id="search-roles" placeholder="Filter roles...">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="roleList" class="d-flex flex-wrap" style="max-height: 75vh; overflow-y: auto;">
+            <!-- JavaScript will populate list items here -->
+          </div>
+        </div>
+        <div class="modal-footer flex justify-content-between">
+          <div class="flex">
+            <button type="button" class="btn btn-danger" onclick="clearSelectedRoles()">Clear</button>
+            <button type="button" class="btn btn-warning" onclick="selectAllRoles()">Select All</button>
+
+          </div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  
+
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-2" id="toast-container" aria-live="polite"
     aria-atomic="true">
   </div>
 

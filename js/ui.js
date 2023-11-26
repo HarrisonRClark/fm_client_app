@@ -4,6 +4,10 @@ $(document).ready(function() {
     loadSeedData();
     fileChangeListener();
     handleSelection();
+    updateUIFromStoredSelection();
+    updateSelectedRolesSummary();
+    roleFilterEventListener();
+    assignClearButton();
 
 
 });
