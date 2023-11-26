@@ -5,3 +5,8 @@ function toggleTheme()
     $('html').attr('data-bs-theme', newTheme);
 }
 
+function toggleThemeListener() {
+    $('#modeToggle').on('click', function() {
+        toggleTheme();
+    });
+}
