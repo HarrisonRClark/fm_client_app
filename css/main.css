@@ -1,0 +1,17 @@
+#roleList {
+    display: none;
+    flex-wrap: wrap;
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
+#roleList.show {
+    display: flex;
+}
+
+@media (min-width: 992px) {
+    #roleList li {
+        width: 33.333%;
+        box-sizing: border-box;
+    }
+}

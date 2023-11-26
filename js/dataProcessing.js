@@ -14,6 +14,7 @@ async function loadSeedData() {
         let seedData = localStorage.getItem(seedDataKey);
         if (seedData) {
             dispatchSeedDataLoadedEvent(seedData);
+            populateRolesList();
             return JSON.parse(seedData);
         }
 
@@ -26,6 +27,8 @@ async function loadSeedData() {
         seedData = localStorage.setItem(seedDataKey, JSON.stringify(data));
         showToast("Base attribute weightings have been imported and saved.", 'Seed Data Success', 'success');
         dispatchSeedDataLoadedEvent(seedData);
+            
+        populateRolesList();
         return data;
 
     } catch (error) {
@@ -118,4 +121,3 @@ function loadLocalData() {
 
 
 
-loadSeedData();

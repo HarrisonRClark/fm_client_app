@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+function fileChangeListener(){
     var fileInput = document.getElementById('file-input');
 
     fileInput.addEventListener('change', function (event) {
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }, 0);
     });
-});
+}
 
 function isValidFile(file) {
     if (!file) {
