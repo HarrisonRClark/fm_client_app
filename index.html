@@ -53,7 +53,7 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <input type="text" class="form-control" id="search-roles" placeholder="Filter roles...">
+          <input type="text" class="form-control" id="search-roles" placeholder="Filter roles..." autocomplete="off">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -74,6 +74,27 @@
   </div>
 
 
+<!-- Edit Role Modal -->
+<div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+              <!-- Dynamic form will be injected here -->
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="saveRoleChanges">Save Changes</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
 
 
   
@@ -90,12 +111,12 @@
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
   <script src="js/toastNotifications.js"></script>
-  <script src="js/editWeighting.js"></script>
   <script src="js/fileUpload.js"></script>
   <script src="js/processFile.js"></script>
   <script src="js/dataProcessing.js"></script>
   <script src="js/tableGeneration.js"></script>
   <script src="js/listFilter.js"></script>
+  <script src="js/editWeighting.js"></script>
   <script src="js/themeToggle.js"></script>
   <script src="js/ui.js"></script>
 </body>

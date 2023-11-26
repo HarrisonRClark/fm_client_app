@@ -8,6 +8,7 @@ $(document).ready(function() {
     updateSelectedRolesSummary();
     roleFilterEventListener();
     assignClearButton();
+    editInit();
 
 
 });

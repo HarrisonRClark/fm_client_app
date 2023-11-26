@@ -119,5 +119,9 @@ function loadLocalData() {
     }
 }
 
+function getRoleDataByCode(roleCode) {
+    var seedData = JSON.parse(localStorage.getItem('seedData')) || [];
+    return seedData.find(role => role.RoleCode === roleCode);
+}
 
 
