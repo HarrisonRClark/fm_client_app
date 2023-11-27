@@ -25,6 +25,7 @@ async function processFile(file) {
 
                 const playersWithHighestRoles = findHighestScoringRoles(scores.playerScores, loadLocalData());
                 showToast(`Calculated all scores for ${formattedNumberOfPlayers} players in ${timeTakenMs} ms`, 'Calculation Complete', 'success');
+                console.log(playersWithHighestRoles);
 
                 initializeBootstrapTable(playersWithHighestRoles);
             } else if (scores.errorOccurred) {

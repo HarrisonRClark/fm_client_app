@@ -20,7 +20,8 @@ function editInit() {
         var updatedRoleData = {};
         $('#editRoleForm').find('input').each(function () {
             var inputName = $(this).attr('name');
-            updatedRoleData[inputName] = $(this).val();
+            var inputValue = $(this).val();
+            updatedRoleData[inputName] = $(this).attr('type') === 'number' ? parseFloat(inputValue) : inputValue;
         });
 
         updateRoleData(updatedRoleData);
@@ -79,7 +80,8 @@ function updateRoleData(updatedRoleData) {
     } else {
         showToast("Role not found!", "Error");
     }
-
+    
     localStorage.setItem('seedData', JSON.stringify(seedData));
+    showToast(`Updated attribute weightings for ${updatedRoleData.Role}.`, "Updated", "success");
 }
 

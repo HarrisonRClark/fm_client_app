@@ -122,9 +122,23 @@ function loadLocalData() {
     }
 }
 
+function reloadSeedData() {
+    localStorage.removeItem(seedDataKey);
+    loadSeedData();
+    clearSelectedRoles();
+
+
+}
+
 function getRoleDataByCode(roleCode) {
     var seedData = JSON.parse(localStorage.getItem('seedData')) || [];
     return seedData.find(role => role.RoleCode === roleCode);
+}
+
+function assignResetButton(){
+    $('#restoreDefaults').on('click', function() {
+        const reloadedData = reloadSeedData();
+    });
 }
 
 

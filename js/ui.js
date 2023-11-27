@@ -11,6 +11,7 @@ $(document).ready(function() {
     setupFileChangeListener();
     setupCalculateButtonListener();
     toggleThemeListener();
+    assignResetButton();
 
 
 

@@ -37,8 +37,11 @@ function setupCalculateButtonListener(){
         setTimeout(() => {
             if (isValidFile(file)) {
                 processFile(file);
+                updateUIFromStoredSelection();
             } else {
                 resetFileInput(fileInput);
+                
+                updateUIFromStoredSelection();
                 hideSpinner();
             }
         }, 0);
