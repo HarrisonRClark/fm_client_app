@@ -6,9 +6,10 @@ function initializeBootstrapTable(data) {
 
     // Define static columns
     var columns = [
-        { field: 'Inf', title: 'Inf', sortable: true },
         { field: 'Name', title: 'Name', sortable: true },
+        { field: 'Inf', title: 'Inf', sortable: true },
         { field: 'Age', title: 'Age', sortable: true },
+        { field: 'Club', title: 'Club', sortable: true},
         { field: 'Transfer Value', title: 'Transfer Value', sortable: true },
         {
             field: 'Wage',
@@ -18,14 +19,17 @@ function initializeBootstrapTable(data) {
                 return row.Wage || row.Salary;
             }
         },
-        { field: 'Nat', title: 'Nationality', sortable: true },
+        { field: 'Nationality', title: 'Nationality', sortable: true },
         { field: 'Position', title: 'Position', sortable: true },
         { field: 'Personality', title: 'Personality', sortable: true },
         { field: 'Media Handling', title: 'Media Handling', sortable: true },
         { field: 'Left Foot', title: 'Left Foot', sortable: true },
         { field: 'Right Foot', title: 'Right Foot', sortable: true },
-        { field: 'HighestScoringRole', title: 'Best Role', sortable: true },
-        { field: 'HighestScore', title: 'Best Role Score', sortable: true },
+        { field: 'Speed', title: 'Speed', sortable: true },
+        { field: 'Jum', title: 'Jump', sortable: true },
+        { field: 'Str', title: 'Strength', sortable: true },
+        { field: 'Workrate', title: 'Workrate', sortable: true },
+        { field: 'Height', title: 'Height', sortable: true },
 
 
     ];
@@ -33,8 +37,12 @@ function initializeBootstrapTable(data) {
     // Retrieve selectedRoles from localStorage and append as dynamic columns
     var selectedRoles = JSON.parse(localStorage.getItem('selectedRoles')) || [];
     selectedRoles.forEach(function (role) {
-        columns.push({ field: role.code, title: role.name, sortable: true });
+        columns.push({ field: role.code, title: role.code, sortable: true, titleTooltip: role.name });
     });
+
+    columns.push(
+        { field: 'HighestScoringRole', title: 'Best Role', sortable: true },
+        { field: 'HighestScore', title: 'Best Role Score', sortable: true });
 
     var $table = $('#playersTable')
 

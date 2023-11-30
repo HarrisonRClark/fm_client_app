@@ -18,6 +18,8 @@ async function processFile(file) {
             const tableData = convertTableToObject(table);
             const scores = calculateScores(tableData, loadLocalData());
 
+
+
             if (scores && !scores.errorOccurred) {
                 const numberOfPlayers = scores.playerScores.length;
                 const formattedNumberOfPlayers = numberOfPlayers.toLocaleString();
@@ -25,9 +27,11 @@ async function processFile(file) {
 
                 const playersWithHighestRoles = findHighestScoringRoles(scores.playerScores, loadLocalData());
                 showToast(`Calculated all scores for ${formattedNumberOfPlayers} players in ${timeTakenMs} ms`, 'Calculation Complete', 'success');
-                console.log(playersWithHighestRoles);
 
-                initializeBootstrapTable(playersWithHighestRoles);
+                
+                const playersWithUtilityScores = calculateUtilityScores(playersWithHighestRoles);
+
+                initializeBootstrapTable(playersWithUtilityScores);
             } else if (scores.errorOccurred) {
                 showToast(scores.errorMessage, 'Calculation Error', 'error');
             }
@@ -37,6 +41,25 @@ async function processFile(file) {
     } finally {
         hideSpinner();
     }
+}
+
+
+function calculateUtilityScores(data) {
+    data.forEach(player => {
+        // Convert to numbers if necessary
+        let pac = Number(player.Pac);
+        let acc = Number(player.Acc);
+        let wor = Number(player.Wor);
+        let sta = Number(player.Sta);
+        let jum = Number(player.Jum);
+        let bra = Number(player.Bra);
+
+        player.Speed = (pac + acc) * 0.5;
+        player.Workrate = (wor + sta) * 0.5;
+        player.SetPieces = (jum + bra) * 0.5;
+    });
+
+    return data;
 }
 
 
@@ -80,13 +103,32 @@ function convertTableToObject(table) {
     let headers = [];
 
     const headerCells = table.querySelectorAll('th');
-    headerCells.forEach(header => {
-        headers.push(header.textContent.trim());
-    });
+    headerCells.forEach(header => headers.push(header.textContent.trim()));
 
-    const rows = table.querySelectorAll('tr');
+    const rows = Array.from(table.querySelectorAll('tr'));
+
+    // Determine which 'Nat' column should be 'Nationality'
+    if (headers.includes('Nat')) {
+        let natIndexes = headers.reduce((indices, header, index) => {
+            if (header === 'Nat') indices.push(index);
+            return indices;
+        }, []);
+
+        natIndexes.forEach(natIndex => {
+            // Check a few rows to ensure consistency
+            for (let i = 1; i < Math.min(rows.length, 5); i++) {
+                let sampleCellContent = rows[i].querySelectorAll('td')[natIndex].textContent.trim();
+                // If the content matches exactly three letters, rename the column
+                if (/^[A-Za-z]{3}$/.test(sampleCellContent)) {
+                    headers[natIndex] = 'Nationality';
+                    break;
+                }
+            }
+        });
+    }
+
     rows.forEach((row, rowIndex) => {
-        if (rowIndex === 0) return;
+        if (rowIndex === 0) return; // Skip the header row
         let rowData = {};
         const cells = row.querySelectorAll('td');
         cells.forEach((cell, cellIndex) => {

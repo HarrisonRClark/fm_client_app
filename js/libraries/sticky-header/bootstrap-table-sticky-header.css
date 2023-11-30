@@ -1,0 +1,5 @@
+.fix-sticky {
+  position: fixed !important;
+  overflow: hidden;
+  z-index: 100;
+}

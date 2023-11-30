@@ -13,6 +13,7 @@
   <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="js/libraries/sticky-header/bootstrap-table-sticky-header.css">
 </head>
 
 <body>
@@ -48,7 +49,7 @@
 
 
   <div class="container mt-3">
-    <div class="display-6 pb-5">Football Manager Player Scoring System</div>
+    <div class="display-6 pb-5">FM24 Player Scoring System</div>
     <p>
       How to Use: See <a href="https://www.youtube.com/watch?v=DvV9Aigngi8" target="_blank">this video</a> by <a href="https://www.youtube.com/@squirrel_plays_fof4318">squirrel_plays</a>. <a href="https://www.mediafire.com/file/ymf6xhw0bk4enjj/FM24_files.zip/file" target="_blank">Click here to download</a> the views needed to export data from FM.
       
@@ -96,16 +97,20 @@
   </div>
   <div class="p-2">
     <table id="playersTable" 
+    class="table table-striped"
     data-show-export="true"
+    data-sticky-header="true"
     data-pagination="true"
     data-search="true"
+    
+  data-show-search-clear-button="true"
     data-page-size="25"
-    data-click-to-select="true"
     data-toolbar="#toolbar"
     data-show-columns="true"
-    ></table>
-  </div>
-
+    data-show-columns-toggle-all="true"
+    data-show-columns-search="true">
+    </table>
+</div>
 
 
   <!-- Fullscreen Modal -->
@@ -183,6 +188,7 @@
 
   <!-- Bootstrap Table -->
   <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+  <script src="js/libraries/sticky-header/bootstrap-table-sticky-header.js"></script>
 
   <!-- TableExport plugin and its dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/tableExport.min.js"></script>
