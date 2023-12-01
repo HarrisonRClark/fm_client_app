@@ -6,8 +6,8 @@ function initializeBootstrapTable(data) {
 
     // Define static columns
     var columns = [
-        { field: 'Name', title: 'Name', sortable: true },
         { field: 'Inf', title: 'Inf', sortable: true },
+        { field: 'Name', title: 'Name', sortable: true },
         { field: 'Age', title: 'Age', sortable: true },
         { field: 'Club', title: 'Club', sortable: true},
         { field: 'Transfer Value', title: 'Transfer Value', sortable: true },
@@ -19,16 +19,16 @@ function initializeBootstrapTable(data) {
                 return row.Wage || row.Salary;
             }
         },
-        { field: 'Nationality', title: 'Nationality', sortable: true },
+        { field: 'Nationality', title: 'Nat', titleTooltip: 'Nationality', sortable: true },
         { field: 'Position', title: 'Position', sortable: true },
         { field: 'Personality', title: 'Personality', sortable: true },
         { field: 'Media Handling', title: 'Media Handling', sortable: true },
         { field: 'Left Foot', title: 'Left Foot', sortable: true },
         { field: 'Right Foot', title: 'Right Foot', sortable: true },
-        { field: 'Speed', title: 'Speed', sortable: true },
-        { field: 'Jum', title: 'Jump', sortable: true },
-        { field: 'Str', title: 'Strength', sortable: true },
-        { field: 'Workrate', title: 'Workrate', sortable: true },
+        { field: 'Speed', title: 'Spd', titleTooltip: 'Speed', sortable: true },
+        { field: 'Jum', title: 'Jmp', titleTooltip: 'Jump', sortable: true },
+        { field: 'Str', title: 'Str', titleTooltip: 'Strength', sortable: true },
+        { field: 'Workrate', title: 'Work', titleTooltip: 'Workrate', sortable: true },
         { field: 'Height', title: 'Height', sortable: true },
 
 
