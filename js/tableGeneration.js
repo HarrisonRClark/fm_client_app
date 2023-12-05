@@ -41,8 +41,9 @@ function initializeBootstrapTable(data) {
     });
 
     columns.push(
-        { field: 'HighestScoringRole', title: 'Best Role', sortable: true },
-        { field: 'HighestScore', title: 'Best Role Score', sortable: true });
+        { field: 'HighestScore', title: 'Highest Role Score', sortable: true },
+        { field: 'HighestScoringRole', title: 'Resulting Role', sortable: true }
+        );
 
     var $table = $('#playersTable')
 
