@@ -46,13 +46,12 @@ async function processFile(file) {
 
 function calculateUtilityScores(data) {
     data.forEach(player => {
-        // Convert to numbers if necessary
-        let pac = Number(player.Pac);
-        let acc = Number(player.Acc);
-        let wor = Number(player.Wor);
-        let sta = Number(player.Sta);
-        let jum = Number(player.Jum);
-        let bra = Number(player.Bra);
+        let pac = processAttribute(player.Pac);
+        let acc = processAttribute(player.Acc);
+        let wor = processAttribute(player.Wor);
+        let sta = processAttribute(player.Sta);
+        let jum = processAttribute(player.Jum);
+        let bra = processAttribute(player.Bra);
 
         player.Speed = (pac + acc) * 0.5;
         player.Workrate = (wor + sta) * 0.5;
@@ -62,6 +61,20 @@ function calculateUtilityScores(data) {
     return data;
 }
 
+
+function processAttribute(attribute) {
+    if (typeof attribute === 'string' && attribute.includes('-')) {
+        if (attribute === '-') {
+            return 0;
+        }
+        const rangeParts = attribute.split('-').map(part => parseInt(part, 10));
+        if (rangeParts.length === 2 && rangeParts.every(part => !isNaN(part))) {
+            return (rangeParts[0] + rangeParts[1]) / 2;
+        }
+        throw new Error(`Invalid range format for attribute '${attribute}'`);
+    }
+    return Number(attribute);
+}
 
 
 function validateHtmlContent(html) {
