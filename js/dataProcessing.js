@@ -59,7 +59,19 @@ function calculateScores(tableData, seedData) {
                         throw new Error(`Missing attribute '${attribute}' in player data.`);
                     }
 
-                    let playerAttribute = parseInt(player[attribute] || '0', 10);
+                    let playerAttribute = player[attribute] || '0';
+
+                    if (playerAttribute.includes('-')) {
+                        const rangeParts = playerAttribute.split('-').map(part => parseInt(part, 10));
+                        if (rangeParts.length === 2 && rangeParts.every(part => !isNaN(part))) {
+                            playerAttribute = (rangeParts[0] + rangeParts[1]) / 2;
+                        } else {
+                            throw new Error(`Invalid range format for attribute '${attribute}' in player data.`);
+                        }
+                    } else {
+                        playerAttribute = parseInt(playerAttribute, 10);
+                    }
+
                     if (isNaN(playerAttribute)) {
                         playerAttribute = 0;}
                     totalScore += playerAttribute * weight;
