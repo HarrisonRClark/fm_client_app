@@ -59,7 +59,9 @@ function calculateScores(tableData, seedData) {
                         throw new Error(`Missing attribute '${attribute}' in player data.`);
                     }
 
-                    const playerAttribute = parseInt(player[attribute] || '0', 10);
+                    let playerAttribute = parseInt(player[attribute] || '0', 10);
+                    if (isNaN(playerAttribute)) {
+                        playerAttribute = 0;}
                     totalScore += playerAttribute * weight;
                     totalWeight += weight;
                 }
