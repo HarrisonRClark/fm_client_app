@@ -56,7 +56,7 @@ function calculateScores(tableData, seedData) {
                     }
 
                     if (!player.hasOwnProperty(attribute)) {
-                        throw new Error(`Missing attribute '${attribute}' in player data.`);
+                        throw new Error(`Missing attribute '${attribute}' in player data`);
                     }
 
                     let playerAttribute = processAttribute(player[attribute] || '0');
@@ -71,7 +71,7 @@ function calculateScores(tableData, seedData) {
                 }
             } catch (error) {
                 errorOccurred = true;
-                errorMessage = `Error calculating score for ${player.Name}: ${error.message}`;
+                errorMessage = `Error calculating score for ${player.Name}: ${error.message}. Please make sure your game is set to the English language and the view is set to 'all attributes'. It will error if not.`;
                 break;
             }
         }
