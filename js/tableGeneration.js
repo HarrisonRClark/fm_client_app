@@ -31,7 +31,7 @@ function initializeBootstrapTable(data) {
 
 
     ];
-
+    
     // Retrieve selectedRoles from localStorage and append as dynamic columns
     var selectedRoles = JSON.parse(localStorage.getItem('selectedRoles')) || [];
     selectedRoles.forEach(function (role) {

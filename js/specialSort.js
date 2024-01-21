@@ -1,7 +1,6 @@
 var isWageClick = null
 var isTransferValueClick = null
 
-
 // To save the symbol of the currency use by the user 
 function currencyUse(finalData) {
     for(var k in finalData) {
@@ -9,15 +8,22 @@ function currencyUse(finalData) {
             return finalData[k].Wage.match(/[$€£¥₽$¥]/g)[0] 
         }
     }
+    return ''
 }
 
 $(document).on("click","th", function () {
-    if ($(this).attr("data-field") === "Wage") {
+    var isWageWriteSalary = false 
+    breakme: if ($(this).attr("data-field") === "Wage" | $(this).attr("data-field") === "Salary") {
         const tempObj = {}
         var finalData = []
         $("table").attr("data-page-size","unlimited");
 
         var data = $('#playersTable tr').map(function(index, elem) {
+            $("th .th-inner", this).each(function() {
+                if ($(this).text() == "Salary") {
+                    isWageWriteSalary = true 
+                } 
+            })
             $("th",this).each(function() { 
                 tempObj[`${$(this).attr("data-field")}`] = "none"
             })
@@ -42,8 +48,8 @@ $(document).on("click","th", function () {
             currencyUse = currencyUse(finalData)
         } catch(e){
             //
-        }
-        
+        }     
+
         // To save the type of wages (p/w, p/m, p/y)
         var timeWage = () => {
             for(var k in finalData) {
@@ -51,20 +57,34 @@ $(document).on("click","th", function () {
                     return `${finalData[k].Wage}`.match(/[a-z/]/g).join("") 
                 }
             }
+
+            return ''
         }
 
         timeWage = timeWage()
+
+
+        /*  
+        In case the file is only showing national team, the wage/salary is always show as "-". Thus, no sorting is necessary.
+        */        
+        if (currencyUse === '' | timeWage === '') {
+            finalData.shift()
+            isWageClick = isWageClick ? false : true 
+            isTransferValueClick = null 
+            break breakme ; 
+        }
 
         // We extract the "real" number from the column 
         finalData.sort((a,b) => {
             a.Wage = Number(`${a.Wage}`.replace(/[^\d]/g, ''))
             b.Wage = Number(`${b.Wage}`.replace(/[^\d]/g, ''))
             return a.Wage - b.Wage});
+        
         for(var k in finalData) {
             // We add comas to better visibility
             finalData[k].Wage = (finalData[k].Wage.toString()).split('').reverse().join("").match(/.{1,3}/g).join(',').split('').reverse().join('')
             // Then we add currencySymbol + timeWage (p/w, p/m, p/y...)
-            finalData[k].Wage = currencyUse + finalData[k].Wage + timeWage
+            finalData[k].Wage = currencyUse + finalData[k].Wage + timeWage   
         }
         finalData.shift()
 
@@ -86,6 +106,11 @@ $(document).on("click","th", function () {
 
         //Getting the data back into an array of object 
         var data = $('#playersTable tr').map(function(index, elem) {
+            $("th .th-inner", this).each(function() {
+                if ($(this).text() == "Salary") {
+                    isWageWriteSalary = true 
+                } 
+            })
             $("th",this).each(function() { 
                 tempObj[`${$(this).attr("data-field")}`] = "none"
             })
@@ -135,7 +160,6 @@ $(document).on("click","th", function () {
             finalData.reverse()
             isTransferValueClick = true
         } else {
-            
             isTransferValueClick = false
         }
 
@@ -147,6 +171,17 @@ $(document).on("click","th", function () {
         isTransferValueClick = null 
     }
 
+    //Replace the "wage" key into "salary" to leave the th as it was.
+    if (isWageWriteSalary) {
+        finalData = finalData.map(({
+            Wage: Salary,
+            ...rest
+        }) => ({
+            Salary,
+            ...rest
+        }))
+    }
+
     // We put back the data in the HTML table 
     initializeBootstrapTable(finalData);
 
@@ -155,9 +190,9 @@ $(document).on("click","th", function () {
         $("th",this).each(function() { 
             if ($(this).attr("data-field") == "Wage") {
                 $(".th-inner", this).each(function() {
-                    if (isWageClick == false) {
+                    if (isWageClick === false) {
                         $(this).attr('class', "th-inner sortable both desc")
-                    } else if (isWageClick == true){
+                    } else if (isWageClick){
                         $(this).attr('class', "th-inner sortable both asc")
                     } else {
                         $(this).attr('class', "th-inner sortable both")
@@ -167,9 +202,9 @@ $(document).on("click","th", function () {
 
             if ($(this).attr("data-field") == "Transfer Value") {
                 $(".th-inner", this).each(function() {
-                    if (isTransferValueClick == false) {
+                    if (isTransferValueClick === false) {
                         $(this).attr('class', "th-inner sortable both asc")
-                    } else if (isTransferValueClick == true) {
+                    } else if (isTransferValueClick) {
                         $(this).attr('class', "th-inner sortable both desc")
                     } else {
                         $(this).attr('class', "th-inner sortable both")
