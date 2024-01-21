@@ -1,7 +1,5 @@
 function initializeBootstrapTable(data) {
 
-
-
     var useWageTitle = data.some(item => item.Wage !== undefined);
 
     // Define static columns
@@ -33,7 +31,7 @@ function initializeBootstrapTable(data) {
 
 
     ];
-
+    
     // Retrieve selectedRoles from localStorage and append as dynamic columns
     var selectedRoles = JSON.parse(localStorage.getItem('selectedRoles')) || [];
     selectedRoles.forEach(function (role) {
@@ -53,7 +51,8 @@ function initializeBootstrapTable(data) {
 
     $table.bootstrapTable({
         data: data,
-        columns: columns
+        columns: columns,
+        pageSize: data.length
     });
 
     $(function () {
